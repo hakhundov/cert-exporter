@@ -19,15 +19,17 @@ import (
 // PeriodicAwsChecker is an object designed to check for .pem files in AWS Secrets Manager
 type PeriodicAwsChecker struct {
 	awsAccount, awsRegion string
+	awsSecrets	 []string
 	period           time.Duration
 	exporter         *exporters.AwsExporter
 }
 
 // NewCertChecker is a factory method that returns a new AwsCertChecker
-func NewAwsChecker(awsAccount string, awsRegion string, period time.Duration, e *exporters.AwsExporter) *PeriodicAwsChecker {
+func NewAwsChecker(awsAccount, awsRegion string, awsSecrets []string, period time.Duration, e *exporters.AwsExporter) *PeriodicAwsChecker {
 	return &PeriodicAwsChecker{
 		awsAccount:	      awsAccount,
 		awsRegion:		  awsRegion,
+		awsSecrets:    awsSecrets,
 		period:           period,
 		exporter:         e,
 	}
@@ -44,11 +46,11 @@ func (p *PeriodicAwsChecker) StartChecking() {
 		svc := secretsmanager.New(session.New(), aws.NewConfig().WithRegion(p.awsRegion))
 
 		//TODO: Incorporate below block in FOR loop over all secrets passed as environment variable
-		secretNameArray := []string{"mnyp-secrets-auth/acc/namespace","mnyp-secrets-auth/acc/am_config","mnyp-secrets-auth/acc/am_encap"}
+		//secretNameArray := []string{"mnyp-secrets-auth/acc/namespace","mnyp-secrets-auth/acc/am_config","mnyp-secrets-auth/acc/am_encap"}
 		//account:="689483148385"
 		//region:="eu-central-1"
 
-		for _, secretName := range secretNameArray {
+		for _, secretName := range p.awsSecrets {
 			fmt.Println("# [INFO] Getting secret "+secretName+" from AWS Secrets Manager")
 
 

@@ -38,6 +38,7 @@ var (
 	includeSecretsTypes       args.GlobArgs
 	awsAccount		  		  string
 	awsRegion	              string
+	awsSecrets			  args.GlobArgs
 )
 
 func init() {
@@ -59,6 +60,7 @@ func init() {
 
 	flag.StringVar(&awsAccount, "aws-account","", "AWS account to search for secrets in")
 	flag.StringVar(&awsRegion, "aws-region","", "AWS region to search for secrets in")
+	flag.Var(&awsSecrets, "aws-secret", "AWS secrets to export")
 }
 
 func main() {
@@ -84,9 +86,9 @@ func main() {
 		go configChecker.StartChecking()
 	}
 
-	if len(awsAccount) > 0 && len(awsRegion) > 0 {
-		glog.Infof("Starting check for AWS Secrets Manager in Account %s and Region %s", awsAccount, awsRegion)
-		awsChecker := checkers.NewAwsChecker(awsAccount, awsRegion, pollingPeriod, &exporters.AwsExporter{})
+	if len(awsAccount) > 0 && len(awsRegion) > 0 && len(awsSecrets) > 0 {
+		glog.Infof("Starting check for AWS Secrets Manager in Account %s and Region %s and Secrets %s", awsAccount, awsRegion, awsSecrets)
+		awsChecker := checkers.NewAwsChecker(awsAccount, awsRegion, awsSecrets, pollingPeriod, &exporters.AwsExporter{})
 		go awsChecker.StartChecking()
 	}
 
