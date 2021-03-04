@@ -38,21 +38,14 @@ func NewAwsChecker(awsAccount, awsRegion string, awsSecrets []string, period tim
 // StartChecking starts the periodic file check.  Most likely you want to run this as an independent go routine.
 func (p *PeriodicAwsChecker) StartChecking() {
 	periodChannel := time.Tick(p.period)
-
 	for {
 		glog.Info("Begin periodic check")
 
 		// Create a Session with a custom region
 		svc := secretsmanager.New(session.New(), aws.NewConfig().WithRegion(p.awsRegion))
 
-		//TODO: Incorporate below block in FOR loop over all secrets passed as environment variable
-		//secretNameArray := []string{"mnyp-secrets-auth/acc/namespace","mnyp-secrets-auth/acc/am_config","mnyp-secrets-auth/acc/am_encap"}
-		//account:="689483148385"
-		//region:="eu-central-1"
-
 		for _, secretName := range p.awsSecrets {
 			fmt.Println("# [INFO] Getting secret "+secretName+" from AWS Secrets Manager")
-
 
 			input := &secretsmanager.GetSecretValueInput{
 				SecretId:     aws.String("arn:aws:secretsmanager:"+p.awsRegion+":"+p.awsAccount+":secret:"+secretName),
