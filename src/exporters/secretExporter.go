@@ -1,7 +1,7 @@
 package exporters
 
 import (
-	"github.com/hakundov/cert-exporter/src/metrics"
+	"github.com/hakhundov/cert-exporter/src/metrics"
 )
 
 // CertExporter exports PEM file certs
