@@ -36,9 +36,9 @@ var (
 	includeSecretsDataGlobs   args.GlobArgs
 	excludeSecretsDataGlobs   args.GlobArgs
 	includeSecretsTypes       args.GlobArgs
-	awsAccount		  		  string
-	awsRegion	              string
-	awsSecrets			  args.GlobArgs
+	awsAccount                string
+	awsRegion                 string
+	awsSecrets                args.GlobArgs
 )
 
 func init() {
@@ -58,8 +58,8 @@ func init() {
 	flag.Var(&includeSecretsTypes, "secret-include-types", "Select only specific a secret type (Default nil).")
 	flag.Var(&excludeSecretsDataGlobs, "secrets-exclude-glob", "Secret globs to exclude when looking for secret data keys.")
 
-	flag.StringVar(&awsAccount, "aws-account","", "AWS account to search for secrets in")
-	flag.StringVar(&awsRegion, "aws-region","", "AWS region to search for secrets in")
+	flag.StringVar(&awsAccount, "aws-account", "", "AWS account to search for secrets in")
+	flag.StringVar(&awsRegion, "aws-region", "", "AWS region to search for secrets in")
 	flag.Var(&awsSecrets, "aws-secret", "AWS secrets to export")
 }
 
